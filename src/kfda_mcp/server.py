@@ -21,7 +21,7 @@ load_dotenv()
 MFDS_API_KEY = os.getenv("MFDS_API_KEY", "")
 
 # Public MFDS OpenAPI endpoints (식약처 공공 OpenAPI)
-DRUG_MASTER_URL = "https://apis.data.go.kr/1471000/DrugPrdtPrmsnInfoService06/getDrugPrdtPrmsnDtlInq05"
+DRUG_MASTER_URL = "https://apis.data.go.kr/1471000/DrugPrdtPrmsnInfoService07/getDrugPrdtPrmsnDtlInq06"
 DUR_URL = "https://apis.data.go.kr/1471000/DURPrdlstInfoService03/getUsjntTabooInfoList03"
 SUPPLEMENT_URL = "https://apis.data.go.kr/1471000/HtfsInfoService03/getHtfsItem01"
 EASY_DRUG_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList"
