@@ -4,6 +4,7 @@ MCP (Model Context Protocol) server for Korean Ministry of Food and Drug Safety 
 
 LLM agents (Claude, ChatGPT, etc.) can autonomously query Korean drug master, DUR (Drug Utilization Review) safety rules, and health supplement databases through the standard MCP protocol.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21063208.svg)](https://doi.org/10.5281/zenodo.21063208)
 [![MCP](https://img.shields.io/badge/MCP-Anthropic-8b5cf6?style=for-the-badge)](https://modelcontextprotocol.io)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)

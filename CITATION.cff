@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "kfda-mcp: MCP Server for Korean MFDS Public APIs"
+abstract: >
+  An open-source MCP (Model Context Protocol) server that wraps the Korean
+  Ministry of Food and Drug Safety (MFDS, 식약처) public OpenAPIs, enabling
+  LLM agents (Claude, GPT, etc.) to autonomously query Korean drug master,
+  DUR (Drug Utilization Review) safety rules, e약은요 patient-friendly drug
+  information, and functional health food (건강기능식품) data through the
+  standard Anthropic MCP protocol. This is the first MCP server published
+  for the Korean MFDS healthcare data ecosystem.
+authors:
+  - family-names: "Kim"
+    given-names: "Myunghee"
+    email: "pianovirus@naver.com"
+date-released: 2026-06-30
+version: "0.1.0"
+doi: "10.5281/zenodo.21063208"
+url: "https://github.com/pianovirus/kfda-mcp"
+repository-code: "https://github.com/pianovirus/kfda-mcp"
+license: MIT
+type: software
+keywords:
+  - mcp
+  - model-context-protocol
+  - mfds
+  - kfda
+  - korean-healthcare
+  - drug-safety
+  - dur
+  - healthcare-ai
+  - llm
+  - anthropic
+  - korea
+  - openapi
