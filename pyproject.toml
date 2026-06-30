@@ -1,0 +1,45 @@
+[project]
+name = "kfda-mcp"
+version = "0.1.0"
+description = "MCP server for Korean Ministry of Food and Drug Safety (식약처) OpenAPI — drug master, DUR, supplements"
+authors = [
+    { name = "Myunghee Kim", email = "pianovirus@naver.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+keywords = ["mcp", "kfda", "mfds", "healthcare", "korea", "drug-safety", "llm", "anthropic"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+    "mcp>=0.9.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+kfda-mcp = "kfda_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/pianovirus/kfda-mcp"
+Issues = "https://github.com/pianovirus/kfda-mcp/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kfda_mcp"]
