@@ -154,11 +154,16 @@ Look up ATC (Anatomical Therapeutic Chemical) classification by code.
 ## 🛣 Roadmap
 
 - [x] Project scaffold + MCP SDK setup
-- [x] `search_drug` — 의약품 마스터 (검증 완료)
-- [ ] `check_dur_interaction` — DUR 안전성 (코드 작동, live test 필요)
-- [x] `search_supplement` — 건기식 (식품안전나라 OpenAPI · C003)
-- [x] `get_drug_easy_info` — e약은요 (검증 완료)
+- [x] `search_drug` — 의약품 마스터 ✅ live verified (타이레놀 → ATC N02BE01)
+- [x] `check_dur_interaction` — DUR 병용금기 ✅ live verified (아스피린+와파린 → 50건)
+- [x] `search_supplement` — 건기식 ✅ live verified (식품안전나라 C003, 비타민 검색 OK)
+- [x] `get_drug_easy_info` — e약은요 ✅ live verified (타이레놀 효능·용법·부작용 반환)
 - [ ] `lookup_atc_code` — ATC 매핑 (planned)
+- [ ] Local cache layer (reduce API calls) — planned
+- [ ] Async batch query support — planned
+- [ ] Multilingual responses (한/영) — planned
+
+**현재 상태: 4/4 핵심 tool 모두 live 검증 완료, production-ready**
 - [ ] Local cache layer (reduce API calls)
 - [ ] Async batch query support
 - [ ] Multilingual responses (한/영)
