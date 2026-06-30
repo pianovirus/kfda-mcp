@@ -19,12 +19,16 @@ from mcp.types import Tool, TextContent
 load_dotenv()
 
 MFDS_API_KEY = os.getenv("MFDS_API_KEY", "")
+FOODSAFETYKOREA_API_KEY = os.getenv("FOODSAFETYKOREA_API_KEY", "")
 
-# Public MFDS OpenAPI endpoints (식약처 공공 OpenAPI)
+# 공공데이터포털 식약처 OpenAPI (의약품)
 DRUG_MASTER_URL = "https://apis.data.go.kr/1471000/DrugPrdtPrmsnInfoService07/getDrugPrdtPrmsnDtlInq06"
 DUR_URL = "https://apis.data.go.kr/1471000/DURPrdlstInfoService03/getUsjntTabooInfoList03"
-SUPPLEMENT_URL = "https://apis.data.go.kr/1471000/HtfsInfoService03/getHtfsItem01"
 EASY_DRUG_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList"
+
+# 식품안전나라 OpenAPI (건강기능식품 — 별도 시스템)
+FOODSAFETY_BASE_URL = "http://openapi.foodsafetykorea.go.kr/api"
+SUPPLEMENT_SERVICE_CODE = "C003"  # 건강기능식품 품목제조신고(원재료)
 
 server = Server("kfda-mcp")
 
@@ -203,16 +207,54 @@ async def search_supplement(
     product: str | None = None,
     limit: int = 10,
 ) -> dict[str, Any]:
-    """Search Korean functional health food registrations."""
-    params: dict[str, Any] = {"numOfRows": limit, "pageNo": 1}
-    if ingredient:
-        params["prdlstNm"] = ingredient
+    """Search Korean functional health food registrations.
+
+    Uses 식품안전나라 OpenAPI (separate from 공공데이터포털 식약처 APIs).
+    Service code C003 = 건강기능식품 품목제조신고(원재료).
+    URL format: {base}/{api_key}/C003/json/{start_row}/{end_row}/
+    Optional path filter: append /KEY=VALUE/ to narrow results.
+    """
+    if not FOODSAFETYKOREA_API_KEY:
+        return {
+            "error": "FOODSAFETYKOREA_API_KEY not configured",
+            "hint": (
+                "Get a separate API key at https://www.foodsafetykorea.go.kr "
+                "(공유서비스 → OpenAPI). 식약처 공공데이터포털 키와 별개 시스템입니다."
+            ),
+        }
+
+    # 식품안전나라는 path parameter 방식 + 옵션 필터를 path 끝에 추가
+    end_row = max(1, min(limit, 1000))
+    url = (
+        f"{FOODSAFETY_BASE_URL}/{FOODSAFETYKOREA_API_KEY}/"
+        f"{SUPPLEMENT_SERVICE_CODE}/json/1/{end_row}"
+    )
     if product:
-        params["bssh_NM"] = product
-    data = await _http_get(SUPPLEMENT_URL, params)
-    if "error" in data:
-        return data
-    items = data.get("body", {}).get("items", []) if isinstance(data.get("body"), dict) else []
+        url += f"/PRDLST_NM={product}"
+    elif ingredient:
+        # 원재료/기능성 키워드 부분 검색
+        url += f"/PRIMARY_FNCLTY={ingredient}"
+    url += "/"
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        try:
+            response = await client.get(url)
+            response.raise_for_status()
+            body = response.text
+            if body.lstrip().startswith("<"):
+                return {
+                    "error": "Foodsafetykorea API returned HTML (auth fail or server error)",
+                    "snippet": body[:200],
+                }
+            data = response.json()
+        except httpx.HTTPError as e:
+            return {"error": str(e), "url": url}
+
+    # 응답 구조: data["C003"]["row"] = [items]
+    service_block = data.get(SUPPLEMENT_SERVICE_CODE, {})
+    items = service_block.get("row", [])
+    if isinstance(items, dict):
+        items = [items]
     return {
         "query": {"ingredient": ingredient, "product": product},
         "count": len(items),
@@ -223,6 +265,7 @@ async def search_supplement(
                 "main_ingredient": item.get("PRIMARY_FNCLTY"),
                 "approved_function": item.get("FNCLTY_CN"),
                 "intake_method": item.get("NTK_MTHD"),
+                "registration_no": item.get("LCNS_NO"),
             }
             for item in items
         ],

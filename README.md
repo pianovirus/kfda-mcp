@@ -154,11 +154,11 @@ Look up ATC (Anatomical Therapeutic Chemical) classification by code.
 ## 🛣 Roadmap
 
 - [x] Project scaffold + MCP SDK setup
-- [ ] `search_drug` — 의약품 마스터
-- [ ] `check_dur_interaction` — DUR 안전성
-- [ ] `search_supplement` — 건기식
-- [ ] `get_drug_easy_info` — e약은요
-- [ ] `lookup_atc_code` — ATC 매핑
+- [x] `search_drug` — 의약품 마스터 (검증 완료)
+- [ ] `check_dur_interaction` — DUR 안전성 (코드 작동, live test 필요)
+- [x] `search_supplement` — 건기식 (식품안전나라 OpenAPI · C003)
+- [x] `get_drug_easy_info` — e약은요 (검증 완료)
+- [ ] `lookup_atc_code` — ATC 매핑 (planned)
 - [ ] Local cache layer (reduce API calls)
 - [ ] Async batch query support
 - [ ] Multilingual responses (한/영)

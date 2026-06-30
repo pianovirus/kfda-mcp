@@ -86,17 +86,49 @@
 
 ---
 
-### 4. (보류) 건강기능식품 OpenAPI
+### 4. 식품안전나라 건강기능식품 OpenAPI
 
-**상태**: WIP (Work In Progress)
+**시스템**: 식품안전나라 (https://www.foodsafetykorea.go.kr) — **공공데이터포털과 별도 시스템**
+**서비스 코드**: `C003` = 건강기능식품 품목제조신고(원재료)
+**URL 형식**:
+```
+http://openapi.foodsafetykorea.go.kr/api/{API_KEY}/C003/json/{start_row}/{end_row}/
+http://openapi.foodsafetykorea.go.kr/api/{API_KEY}/C003/json/1/10/PRDLST_NM=비타민
+                                                                 └─ 옵션 path 필터
+```
 
-**이유**: 공공데이터포털에서 활용신청 가능한 건기식 API 대부분 **LINK 타입**이라 외부 사이트(식품안전나라)로 이동해서 별도 키 발급 필요.
+**키 발급**:
+1. https://www.foodsafetykorea.go.kr 회원가입
+2. **공유서비스 → OpenAPI → 신청**
+3. 즉시 발급
+4. `.env` 에 `FOODSAFETYKOREA_API_KEY=<발급키>` 추가
 
-**대안 검토 중**:
-- 식품안전나라 OpenAPI 직접 신청: https://www.foodsafetykorea.go.kr
-- 또는 공공데이터포털에서 "건강기능식품 품목제조신고" 등 검색
+**kfda-mcp tool**: `search_supplement` → 작동
 
-**kfda-mcp tool**: `search_supplement` → 현재 코드는 있지만 미작동
+**주요 응답 필드**:
+- `PRDLST_NM` — 제품명
+- `BSSH_NM` — 제조사
+- `PRIMARY_FNCLTY` — 주성분/기능성
+- `FNCLTY_CN` — 인정 기능성 내용
+- `NTK_MTHD` — 섭취 방법
+- `LCNS_NO` — 인허가 번호
+
+**응답 구조 (식품안전나라 패턴, 공공데이터포털과 다름)**:
+```json
+{
+  "C003": {
+    "row": [ /* 데이터 배열 */ ],
+    "total_count": "...",
+    "RESULT": {"CODE": "INFO-000", "MSG": "..."}
+  }
+}
+```
+
+**기타 서비스 코드 (참고)**:
+- C001 — 식품(가공식품) 품목제조보고
+- C002 — 식품 안전성 검사
+- C003 — 건강기능식품 ← 우리가 사용
+- 그 외 다양 (식품안전나라 OpenAPI 카탈로그 참조)
 
 ---
 
